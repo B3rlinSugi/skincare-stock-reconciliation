@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Download } from 'lucide-react'
-import { supabaseClient } from '@/lib/db/client'
+import { supabase } from '@/lib/db/client'
 
 type ExportType = 'PRODUCTS' | 'LEDGER'
 
@@ -15,7 +15,7 @@ export default function ExportButton({ type, label = 'Export to CSV' }: { type: 
       let csvContent = ''
       
       if (type === 'PRODUCTS') {
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
           .from('products')
           .select('sku, name, product_stock_summary(total_qty)')
           .order('name')
@@ -31,7 +31,7 @@ export default function ExportButton({ type, label = 'Export to CSV' }: { type: 
           csvContent += `${row.sku},${safeName},${qty}\n`
         })
       } else if (type === 'LEDGER') {
-        const { data, error } = await supabaseClient
+        const { data, error } = await supabase
           .from('stock_ledger')
           .select('id, created_at, movement_type, channel, quantity, batch_id, products(name, sku)')
           .order('created_at', { ascending: false })
