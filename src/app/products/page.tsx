@@ -1,0 +1,158 @@
+// src/app/products/page.tsx — Halaman Daftar Produk & Stok
+import { supabaseAdmin } from '@/lib/db/client'
+import Link from 'next/link'
+import Pagination from '@/components/Pagination'
+import Search from '@/components/Search'
+import ExportButton from '@/components/ExportButton'
+
+export default async function ProductsPage(
+  props: { searchParams: Promise<{ query?: string; page?: string }> }
+) {
+  const searchParams = await props.searchParams
+  const query = searchParams?.query || ''
+  const currentPage = Number(searchParams?.page) || 1
+  const limit = 20
+  const offset = (currentPage - 1) * limit
+
+  // 1. Fetch paginated products based on search
+  let productsQuery = supabaseAdmin
+    .from('products')
+    .select('id, sku, name, is_active', { count: 'exact' })
+
+  if (query) {
+    productsQuery = productsQuery.or(`name.ilike.%${query}%,sku.ilike.%${query}%`)
+  }
+
+  const { data: productsData, count, error: productsError } = await productsQuery
+    .order('name', { ascending: true })
+    .range(offset, offset + limit - 1)
+
+  if (productsError) {
+    return <div className="p-8 text-danger">Gagal memuat produk: {productsError.message}</div>
+  }
+
+  const products = productsData ?? []
+  const totalPages = Math.ceil((count || 0) / limit)
+
+  // 2. Fetch stock totals and batches ONLY for these paginated products
+  const productIds = products.map(p => p.id)
+
+  const [totalsResult, batchesResult] = await Promise.all([
+    supabaseAdmin.from('v_product_stock_total').select('*').in('product_id', productIds),
+    supabaseAdmin.from('v_current_stock').select('*').in('product_id', productIds)
+  ])
+
+  const totals = totalsResult.data ?? []
+  const rows = batchesResult.data ?? []
+
+  const today = new Date()
+  const soon90 = new Date(); soon90.setDate(today.getDate() + 90)
+
+  // Group batches by product
+  const byProduct = new Map<string, typeof rows>()
+  for (const row of rows) {
+    if (!byProduct.has(row.product_id)) byProduct.set(row.product_id, [])
+    byProduct.get(row.product_id)!.push(row)
+  }
+
+  // Create a map for easy total lookup
+  const totalsMap = new Map(totals.map(t => [t.product_id, t.total_qty]))
+
+  return (
+    <>
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Produk & Stok</h1>
+          <p className="page-subtitle">Stok real-time dihitung dari buku besar pergerakan</p>
+        </div>
+        <div className="flex gap-2">
+          <ExportButton type="PRODUCTS" label="Export CSV" />
+          <Link href="/inbound" className="btn btn-success btn-sm">⬇️ Barang Masuk</Link>
+          <Link href="/outbound" className="btn btn-secondary btn-sm">⬆️ Keluar Manual</Link>
+        </div>
+      </div>
+
+      <div className="page-body">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <Search placeholder="Cari SKU atau Nama Produk..." />
+          <div className="text-sm text-secondary">
+            Menampilkan {products.length} dari {count} produk
+          </div>
+        </div>
+
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Nama Produk</th>
+                <th>Total Stok</th>
+                <th>Batch Aktif</th>
+                <th>Expiry Terdekat</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.length === 0 ? (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '32px 0', color: 'var(--text-muted)' }}>
+                    Tidak ada produk ditemukan.
+                  </td>
+                </tr>
+              ) : products.map((product) => {
+                const totalQty = totalsMap.get(product.id) || 0
+                const batches = byProduct.get(product.id) ?? []
+                const activeBatches = batches.filter(b => b.current_qty > 0)
+                const earliestExpiry = activeBatches.sort((a, b) =>
+                  a.expiry_date.localeCompare(b.expiry_date))[0]?.expiry_date
+
+                const expiryDate = earliestExpiry ? new Date(earliestExpiry) : null
+                const isExpired = expiryDate && expiryDate <= today
+                const isExpiringSoon = expiryDate && expiryDate > today && expiryDate <= soon90
+
+                const stockStatus = totalQty <= 0
+                  ? { dot: 'empty', label: 'Habis', cls: 'badge-danger' }
+                  : totalQty < 100
+                  ? { dot: 'low', label: 'Rendah', cls: 'badge-warning' }
+                  : { dot: 'ok', label: 'Aman', cls: 'badge-success' }
+
+                return (
+                  <tr key={product.id}>
+                    <td className="font-mono text-muted text-xs">{product.sku}</td>
+                    <td style={{ fontWeight: 500 }}>
+                      <div style={{ opacity: product.is_active ? 1 : 0.5 }}>{product.name}</div>
+                      {!product.is_active && <div className="text-xs text-danger">Tidak Aktif</div>}
+                    </td>
+                    <td>
+                      <div className="stock-indicator">
+                        <span className={`stock-dot ${stockStatus.dot}`} />
+                        <span className="font-bold">{totalQty.toLocaleString('id-ID')}</span>
+                      </div>
+                    </td>
+                    <td className="text-secondary">{activeBatches.length} batch</td>
+                    <td>
+                      {earliestExpiry ? (
+                        <span className={isExpired ? 'text-danger font-semibold' : isExpiringSoon ? 'text-warning' : 'text-secondary'}>
+                          {isExpired && '⚠️ '}{new Date(earliestExpiry).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </span>
+                      ) : <span className="text-muted">—</span>}
+                    </td>
+                    <td><span className={`badge ${stockStatus.cls}`}>{stockStatus.label}</span></td>
+                    <td>
+                      <Link href={`/products/${product.id}`} className="btn btn-secondary btn-sm">
+                        Detail →
+                      </Link>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
+      </div>
+    </>
+  )
+}
