@@ -63,13 +63,13 @@ const SubmitClaimSchema = z.object({
 /**
  * Submit klaim TikTok — tandai sebagai claimed
  */
-export async function submitTikTokClaim(formData: FormData | string) {
+export async function submitTikTokClaim(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Unauthorized' }
 
-  // Support both FormData (from forms) and string (from direct call)
-  const return_id = typeof formData === 'string' ? formData : formData.get('return_id')
+  // Strictly FormData for Server Actions
+  const return_id = formData.get('return_id') as string
   
   const parsed = SubmitClaimSchema.safeParse({ return_id })
   if (!parsed.success) {
