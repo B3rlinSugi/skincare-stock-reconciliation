@@ -2,7 +2,7 @@
 // src/components/DashboardClient.tsx
 
 import Link from 'next/link'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, useTransform, animate, type Variants } from 'framer-motion'
 import { useEffect } from 'react'
 import { 
   Package, 
@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 
 // Bento Grid Animation Variants
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -28,16 +28,16 @@ const containerVariants = {
   }
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20, scale: 0.98 },
   show: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 350, damping: 25 } }
 }
 
-const tableVariants = {
+const tableVariants: Variants = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.04 } }
 }
-const rowVariants = {
+const rowVariants: Variants = {
   hidden: { opacity: 0, x: -10 },
   show: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } }
 }
