@@ -63,17 +63,17 @@ const SubmitClaimSchema = z.object({
 /**
  * Submit klaim TikTok — tandai sebagai claimed
  */
-export async function submitTikTokClaim(formData: FormData) {
+export async function submitTikTokClaim(formData: FormData): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { success: false, error: 'Unauthorized' }
+  if (!user) return
 
   // Strictly FormData for Server Actions
   const return_id = formData.get('return_id') as string
   
   const parsed = SubmitClaimSchema.safeParse({ return_id })
   if (!parsed.success) {
-    return { success: false, error: 'Invalid return ID' }
+    return
   }
 
   const { error } = await supabaseAdmin
@@ -82,8 +82,10 @@ export async function submitTikTokClaim(formData: FormData) {
     .eq('id', parsed.data.return_id)
     .eq('marketplace', 'TIKTOK')
 
-  if (error) return { success: false, error: error.message }
+  if (error) {
+    console.error('Failed to submit claim:', error)
+    return
+  }
 
   revalidatePath('/returns')
-  return { success: true }
 }
