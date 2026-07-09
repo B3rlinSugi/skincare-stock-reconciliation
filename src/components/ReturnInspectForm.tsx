@@ -23,10 +23,8 @@ export default function ReturnInspectForm({
     const res = await inspectReturn(formData)
     
     if (!res.success) {
-      if (typeof res.error === 'object' && res.error._) {
-        setError(res.error._.join(', '))
-      } else if (typeof res.error === 'string') {
-        setError(res.error)
+      if (res.error && typeof res.error === 'object' && '_' in res.error) {
+        setError((res.error as { _: string[] })._.join(', '))
       } else {
         setError('Terjadi kesalahan')
       }

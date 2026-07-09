@@ -64,7 +64,7 @@ export default function OpnameInputRow({
           />
           {saveState === 'saving' && <Loader2 className="w-4 h-4 animate-spin text-blue-500" />}
           {saveState === 'saved' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
-          {saveState === 'error' && <XCircle className="w-4 h-4 text-red-500" title="Gagal menyimpan" />}
+          {saveState === 'error' && <XCircle className="w-4 h-4 text-red-500" />}
         </div>
       </td>
       <td>
