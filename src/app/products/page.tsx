@@ -157,7 +157,7 @@ export default async function ProductsPage(
             {/* Inventory Health Chart - CSS Only Mockup */}
             <div className="stat-card" style={{ borderColor: 'rgba(6, 182, 212, 0.3)', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
               <div className="text-primary font-medium mb-2 text-sm z-10">Inventory Health</div>
-              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', z-10 }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', zIndex: 10 }}>
                 <div style={{ 
                   width: 80, height: 80, borderRadius: '50%', 
                   border: '4px solid rgba(6, 182, 212, 0.2)', 
