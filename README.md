@@ -8,7 +8,8 @@
   </p>
   
   <p align="center">
-    A robust, fraud-proof stock management system engineered for high-volume Skincare brands, featuring real-time reconciliation, FEFO allocation, and an immutable ledger architecture.
+    A robust, fraud-proof stock management system engineered for high-volume Skincare brands, featuring real-time reconciliation, FEFO allocation, and an immutable ledger architecture.<br><br>
+    <strong>🚀 Tech Stack:</strong> TypeScript, Next.js 14, Supabase, PostgreSQL
   </p>
 
   <p align="center">
