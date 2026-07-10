@@ -97,6 +97,7 @@ export function Sidebar() {
                   </div>
                   <span>{item.label}</span>
                   {item.badge && (
+                    <span className="nav-badge">{item.badge}</span>
                   )}
                 </Link>
               )
