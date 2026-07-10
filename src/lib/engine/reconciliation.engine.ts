@@ -140,25 +140,25 @@ export class ReconciliationEngine {
     // Bulk Upsert log per product untuk menghindari timeout (N+1 query problem)
     const affectedProductIds = Array.from(productAnomalyMap.keys())
     
-    // Ambil stok untuk semua produk yang terkena anomali sekaligus
-    const { data: stockData } = await supabaseAdmin
-      .from('v_product_stock_total')
-      .select('product_id, total_qty')
-      .in('product_id', affectedProductIds)
+    if (affectedProductIds.length > 0) {
+      // Ambil stok untuk semua produk yang terkena anomali sekaligus
+      const { data: stockData } = await supabaseAdmin
+        .from('v_product_stock_total')
+        .select('product_id, total_qty')
+        .in('product_id', affectedProductIds)
 
-    const stockMap = new Map(
-      (stockData as any[] ?? []).map(s => [s.product_id, s.total_qty])
-    )
+      const stockMap = new Map(
+        (stockData as any[] ?? []).map(s => [s.product_id, s.total_qty])
+      )
 
-    const upsertPayload = affectedProductIds.map(productId => ({
-      run_date: today,
-      product_id: productId,
-      computed_stock: stockMap.get(productId) ?? 0,
-      anomaly_flags: productAnomalyMap.get(productId),
-      has_anomaly: true,
-    }))
+      const upsertPayload = affectedProductIds.map(productId => ({
+        run_date: today,
+        product_id: productId,
+        computed_stock: stockMap.get(productId) ?? 0,
+        anomaly_flags: productAnomalyMap.get(productId),
+        has_anomaly: true,
+      }))
 
-    if (upsertPayload.length > 0) {
       await supabaseAdmin
         .from('daily_reconciliation_log')
         .upsert(upsertPayload, { onConflict: 'run_date,product_id' })
@@ -238,6 +238,8 @@ export class ReconciliationEngine {
     if (!cancelledOrders || cancelledOrders.length === 0) return 0
 
     const cancelledIds = (cancelledOrders as { id: string }[]).map(o => o.id)
+
+    if (cancelledIds.length === 0) return 0;
 
     const { data: unreversed } = await supabaseAdmin
       .from('stock_ledger')

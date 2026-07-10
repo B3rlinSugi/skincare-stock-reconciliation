@@ -37,13 +37,17 @@ export default async function ProductsPage(
   // 2. Fetch stock totals and batches ONLY for these paginated products
   const productIds = products.map(p => p.id)
 
-  const [totalsResult, batchesResult] = await Promise.all([
-    supabaseAdmin.from('v_product_stock_total').select('*').in('product_id', productIds),
-    supabaseAdmin.from('v_current_stock').select('*').in('product_id', productIds)
-  ])
+  let totals: any[] = []
+  let rows: any[] = []
 
-  const totals = totalsResult.data ?? []
-  const rows = batchesResult.data ?? []
+  if (productIds.length > 0) {
+    const [totalsResult, batchesResult] = await Promise.all([
+      supabaseAdmin.from('v_product_stock_total').select('*').in('product_id', productIds),
+      supabaseAdmin.from('v_current_stock').select('*').in('product_id', productIds)
+    ])
+    totals = totalsResult.data ?? []
+    rows = batchesResult.data ?? []
+  }
 
   const today = new Date()
   const soon90 = new Date(); soon90.setDate(today.getDate() + 90)
