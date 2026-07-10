@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Sidebar } from '@/components/layout/Sidebar'
+import { NotificationBell } from '@/components/NotificationBell'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 
@@ -17,7 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <div className="app-layout">
           <Sidebar />
-          <main className="main-content">
+          <main className="main-content relative">
+            <NotificationBell />
             {children}
           </main>
         </div>
