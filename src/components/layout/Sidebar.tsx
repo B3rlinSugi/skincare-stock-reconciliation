@@ -97,16 +97,6 @@ export function Sidebar() {
                   </div>
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="nav-badge">{item.badge}</span>
-                  )}
-                  {/* Subtle active background animated with framer motion layoutId */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="active-nav"
-                      className="absolute inset-0 bg-white/10 rounded-lg -z-10"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                      style={{ background: 'rgba(255,255,255,0.06)', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, borderRadius: 8, zIndex: -1 }}
-                    />
                   )}
                 </Link>
               )
@@ -116,13 +106,23 @@ export function Sidebar() {
       </nav>
 
       {/* Footer / User Profile snippet */}
-      <div style={{ marginTop: 'auto', padding: '16px', display: 'flex', alignItems: 'center', gap: 12, borderTop: '1px solid var(--border-subtle)' }}>
-        <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-primary), #a78bfa)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 600, color: '#000' }}>
+      <div style={{ 
+        marginTop: 'auto', 
+        padding: '16px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: 12, 
+        background: 'rgba(255,255,255,0.02)',
+        border: '1px solid var(--border-subtle)',
+        borderRadius: 16,
+        backdropFilter: 'blur(10px)'
+      }}>
+        <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent-info), var(--accent-primary))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, color: '#fff', boxShadow: '0 0 15px rgba(59,130,246,0.5)' }}>
           WA
         </div>
         <div style={{ flex: 1, overflow: 'hidden' }}>
-          <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>Warehouse Admin</div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Pro Plan</div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>Warehouse Admin</div>
+          <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>Admin</div>
         </div>
       </div>
     </aside>

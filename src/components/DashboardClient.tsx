@@ -68,11 +68,12 @@ export default function DashboardClient({ data }: { data: any }) {
           <h1 className="page-title">Overview</h1>
           <p className="page-subtitle">Real-time inventory metrics</p>
         </div>
-        <div className="flex gap-3">
-          <button className="btn btn-secondary">
-            <Search size={14} /> Search
-          </button>
-          <Link href="/reconciliation" className="btn btn-primary">
+        <div className="flex gap-4">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted" />
+            <input type="text" placeholder="Search..." className="form-input pl-9 w-64" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)' }} />
+          </div>
+          <Link href="/reconciliation" className="btn btn-primary" style={{ background: 'linear-gradient(90deg, #8B5CF6, #3B82F6)' }}>
             Run Reconciliation
           </Link>
         </div>
@@ -84,13 +85,13 @@ export default function DashboardClient({ data }: { data: any }) {
         initial="hidden"
         animate="show"
       >
-        {/* Urgent Alerts - Linear Style Soft Banner */}
+        {/* Urgent Alerts */}
         {data.tiktokUrgent?.length > 0 && (
           <motion.div variants={itemVariants}>
             {data.tiktokUrgent.map((ret: any) => (
-              <div key={ret.id} className="alert-banner alert-high flex justify-between items-center">
+              <div key={ret.id} className="alert-banner alert-high flex justify-between items-center" style={{ borderLeftColor: 'var(--accent-danger)' }}>
                 <div className="flex gap-4 items-center">
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(229, 72, 77, 0.15)', color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: 'rgba(236, 72, 153, 0.15)', color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <ShieldAlert size={20} />
                   </div>
                   <div>
@@ -102,7 +103,7 @@ export default function DashboardClient({ data }: { data: any }) {
                     </div>
                   </div>
                 </div>
-                <Link href="/returns" className="btn btn-secondary btn-sm" style={{ border: '1px solid rgba(229,72,77,0.3)', color: 'var(--accent-danger)' }}>
+                <Link href="/returns" className="btn btn-secondary btn-sm" style={{ border: '1px solid rgba(236,72,153,0.3)', color: 'var(--accent-danger)' }}>
                   Resolve Issue
                 </Link>
               </div>
@@ -112,90 +113,116 @@ export default function DashboardClient({ data }: { data: any }) {
 
         {/* Bento Grid layout */}
         <div className="grid-cols-4 mb-6">
-          <motion.div variants={itemVariants} className="card col-span-1">
-            <div className="text-muted text-xs font-medium mb-4 flex items-center justify-between">
-              ACTIVE SKUS <Package size={14} opacity={0.5} />
+          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(139, 92, 246, 0.3)' }}>
+            <div className="form-label mb-4 flex items-center justify-between">
+              ACTIVE SKUS <Package size={16} className="text-info" />
             </div>
-            <div style={{ fontSize: 42, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--text-primary)' }}>
+            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--text-primary)', textShadow: '0 0 20px rgba(255,255,255,0.2)' }}>
               <AnimatedNumber value={data.totalProducts} />
             </div>
-            <div className="text-muted text-xs mt-3 flex gap-2 items-center">
-              <span className="badge badge-neutral">+2 this week</span>
+            <div className="text-muted text-xs mt-4 flex gap-2 items-center">
+              <span className="text-success font-medium">+2 this week</span>
             </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="card col-span-1">
-            <div className="text-muted text-xs font-medium mb-4 flex items-center justify-between">
-              STOCK DEPLETED <AlertTriangle size={14} className="text-danger" />
+          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(236, 72, 153, 0.3)' }}>
+            <div className="form-label mb-4 flex items-center justify-between">
+              STOCK DEPLETED <AlertTriangle size={16} className="text-danger" />
             </div>
-            <div style={{ fontSize: 42, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.zeroStock > 0 ? 'var(--accent-danger)' : 'var(--text-primary)' }}>
+            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.zeroStock > 0 ? 'var(--accent-danger)' : 'var(--text-primary)', textShadow: data.zeroStock > 0 ? '0 0 20px var(--accent-danger-glow)' : 'none' }}>
               <AnimatedNumber value={data.zeroStock} />
             </div>
-            <div className="text-muted text-xs mt-3">items require restock</div>
+            <div className="text-muted text-xs mt-4">items need restock</div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="card col-span-1">
-            <div className="text-muted text-xs font-medium mb-4 flex items-center justify-between">
-              LOW STOCK <TrendingDown size={14} className="text-warning" />
+          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(245, 158, 11, 0.3)' }}>
+            <div className="form-label mb-4 flex items-center justify-between">
+              LOW STOCK <TrendingDown size={16} className="text-warning" />
             </div>
-            <div style={{ fontSize: 42, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.lowStock > 0 ? 'var(--accent-warning)' : 'var(--text-primary)' }}>
+            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.lowStock > 0 ? 'var(--accent-warning)' : 'var(--text-primary)', textShadow: data.lowStock > 0 ? '0 0 20px var(--accent-warning-glow)' : 'none' }}>
               <AnimatedNumber value={data.lowStock} />
             </div>
-            <div className="text-muted text-xs mt-3">items &lt; 100 units</div>
+            <div className="text-muted text-xs mt-4">items &lt; 100 units</div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="card col-span-1">
-            <div className="text-muted text-xs font-medium mb-4 flex items-center justify-between">
-              PENDING RETURNS <Undo2 size={14} className="text-info" />
+          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(59, 130, 246, 0.3)' }}>
+            <div className="form-label mb-4 flex items-center justify-between">
+              PENDING RETURNS <Undo2 size={16} className="text-info" />
             </div>
-            <div style={{ fontSize: 42, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.pendingReturns.length > 0 ? 'var(--accent-primary)' : 'var(--text-primary)' }}>
+            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.pendingReturns.length > 0 ? 'var(--accent-info)' : 'var(--text-primary)', textShadow: data.pendingReturns.length > 0 ? '0 0 20px var(--accent-info-glow)' : 'none' }}>
               <AnimatedNumber value={data.pendingReturns.length} />
             </div>
-            <div className="text-muted text-xs mt-3">awaiting inspection</div>
+            <div className="text-muted text-xs mt-4">awaiting inspection</div>
           </motion.div>
         </div>
 
         {/* Action Bento Cards */}
         <div className="grid-cols-3 mb-6">
           <motion.div variants={itemVariants}>
-            <Link href="/inbound" className="card bento-card h-full">
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(38,181,206,0.1)', color: 'var(--accent-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                <ArrowDownToLine size={24} />
+            <div className="card h-full flex-col justify-between" style={{ borderColor: 'rgba(6, 182, 212, 0.2)' }}>
+              <div>
+                <div className="flex justify-between items-start mb-6">
+                  <div style={{ width: 56, height: 56, borderRadius: 16, border: '1px solid rgba(6,182,212,0.4)', background: 'rgba(6,182,212,0.1)', color: 'var(--accent-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px var(--accent-success-glow), inset 0 0 10px var(--accent-success-glow)' }}>
+                    <ArrowDownToLine size={28} />
+                  </div>
+                  <ArrowDownToLine size={16} opacity={0.3} className="text-success" />
+                </div>
+                <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 18, color: 'var(--text-primary)' }}>Inbound Delivery</div>
+                <div className="text-muted text-sm leading-relaxed mb-6">Record incoming shipments from Maklon with precise batch and expiry tracking.</div>
               </div>
-              <div style={{ fontWeight: 600, marginBottom: 8, fontSize: 15, color: 'var(--text-primary)' }}>Inbound Delivery</div>
-              <div className="text-muted text-sm leading-relaxed">Record incoming shipments from Maklon with precise batch and expiry tracking.</div>
-            </Link>
+              <Link href="/inbound" className="btn btn-secondary" style={{ width: 'max-content', border: '1px solid rgba(6,182,212,0.3)', color: 'var(--accent-success)' }}>
+                New Inbound
+              </Link>
+            </div>
           </motion.div>
+
           <motion.div variants={itemVariants}>
-            <Link href="/outbound" className="card bento-card h-full">
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(229,72,77,0.1)', color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                <ArrowUpFromLine size={24} />
+            <div className="card h-full flex-col justify-between" style={{ borderColor: 'rgba(236, 72, 153, 0.2)' }}>
+              <div>
+                <div className="flex justify-between items-start mb-6">
+                  <div style={{ width: 56, height: 56, borderRadius: 16, border: '1px solid rgba(236,72,153,0.4)', background: 'rgba(236,72,153,0.1)', color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px var(--accent-danger-glow), inset 0 0 10px var(--accent-danger-glow)' }}>
+                    <ArrowUpFromLine size={28} />
+                  </div>
+                  <ArrowUpFromLine size={16} opacity={0.3} className="text-danger" />
+                </div>
+                <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 18, color: 'var(--text-primary)' }}>Manual Outbound</div>
+                <div className="text-muted text-sm leading-relaxed mb-6">Log non-sale movements including promos, and damaged goods disposal.</div>
               </div>
-              <div style={{ fontWeight: 600, marginBottom: 8, fontSize: 15, color: 'var(--text-primary)' }}>Manual Outbound</div>
-              <div className="text-muted text-sm leading-relaxed">Log non-sale movements including promos, samples, and damaged goods disposal.</div>
-            </Link>
+              <Link href="/outbound" className="btn btn-secondary" style={{ width: 'max-content', border: '1px solid rgba(139,92,246,0.3)', color: 'var(--accent-primary)' }}>
+                New Outbound
+              </Link>
+            </div>
           </motion.div>
+
           <motion.div variants={itemVariants}>
-            <Link href="/simulation" className="card bento-card h-full">
-              <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(94,106,210,0.1)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                <Gamepad2 size={24} />
+            <div className="card h-full flex-col justify-between" style={{ borderColor: 'rgba(59, 130, 246, 0.2)' }}>
+              <div>
+                <div className="flex justify-between items-start mb-6">
+                  <div style={{ width: 56, height: 56, borderRadius: 16, border: '1px solid rgba(59,130,246,0.4)', background: 'rgba(59,130,246,0.1)', color: 'var(--accent-info)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px var(--accent-info-glow), inset 0 0 10px var(--accent-info-glow)' }}>
+                    <Gamepad2 size={28} />
+                  </div>
+                  <Gamepad2 size={16} opacity={0.3} className="text-info" />
+                </div>
+                <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 18, color: 'var(--text-primary)' }}>Marketplace Sim</div>
+                <div className="text-muted text-sm leading-relaxed mb-6">Inject synthetic events to test system load and reconciliation accuracy.</div>
               </div>
-              <div style={{ fontWeight: 600, marginBottom: 8, fontSize: 15, color: 'var(--text-primary)' }}>Marketplace Sim</div>
-              <div className="text-muted text-sm leading-relaxed">Inject synthetic events to test system load and reconciliation accuracy.</div>
-            </Link>
+              <Link href="/simulation" className="btn btn-secondary" style={{ width: 'max-content', border: '1px solid rgba(59,130,246,0.3)', color: 'var(--accent-info)' }}>
+                Open Simulator
+              </Link>
+            </div>
           </motion.div>
         </div>
 
         {/* Ledger Activity Table */}
         <motion.div variants={itemVariants} className="card" style={{ padding: 0 }}>
           <div className="flex items-center justify-between" style={{ padding: '24px 32px' }}>
-            <div style={{ fontWeight: 600, fontSize: 15, display: 'flex', gap: 10, alignItems: 'center' }}>
-              <Clock size={16} className="text-secondary" /> Activity Log
+            <div style={{ fontWeight: 600, fontSize: 16, display: 'flex', gap: 10, alignItems: 'center' }}>
+              <Clock size={18} className="text-secondary" /> Activity Log
             </div>
-            <Link href="/products" className="btn btn-secondary btn-sm" style={{ background: 'transparent' }}>View All <ChevronRight size={14}/></Link>
+            <Link href="/products" className="btn btn-secondary btn-sm" style={{ background: 'transparent', border: 'none' }}>View All <ChevronRight size={14}/></Link>
           </div>
           
-          <div className="table-container" style={{ border: 'none', borderRadius: 0 }}>
+          <div className="table-container" style={{ border: 'none', borderRadius: 0, background: 'transparent' }}>
             <table>
               <thead>
                 <tr>
@@ -221,15 +248,15 @@ export default function DashboardClient({ data }: { data: any }) {
                 ) : (
                   data.recentLedger.map((entry: any) => (
                     <motion.tr variants={rowVariants} key={entry.id}>
-                      <td style={{ paddingLeft: 32, fontWeight: 500 }}>{entry.products?.name ?? '—'}</td>
+                      <td style={{ paddingLeft: 32, fontWeight: 600, color: 'var(--text-primary)' }}>{entry.products?.name ?? '—'}</td>
                       <td>
-                        <span className={`badge ${entry.movement_type === 'INBOUND' ? 'badge-success' : entry.movement_type === 'OUTBOUND' ? 'badge-danger' : entry.movement_type === 'RETURN_IN' ? 'badge-info' : 'badge-warning'}`}>
+                        <span className={`badge ${entry.movement_type === 'INBOUND' ? 'badge-info' : entry.movement_type === 'OUTBOUND' ? 'badge-danger' : entry.movement_type === 'RETURN_IN' ? 'badge-success' : 'badge-warning'}`}>
                           {entry.movement_type}
                         </span>
                       </td>
-                      <td><span className="text-muted font-mono">{channelLabel[entry.channel] ?? entry.channel}</span></td>
+                      <td><span className="text-muted">{channelLabel[entry.channel] ?? entry.channel}</span></td>
                       <td>
-                        <span className={`font-mono ${entry.quantity > 0 ? 'text-success' : 'text-danger'}`}>
+                        <span className={`font-mono font-bold ${entry.quantity > 0 ? 'text-success' : 'text-danger'}`} style={{ textShadow: entry.quantity > 0 ? '0 0 10px var(--accent-success-glow)' : '0 0 10px var(--accent-danger-glow)' }}>
                           {entry.quantity > 0 ? '+' : ''}{entry.quantity.toLocaleString('id-ID')}
                         </span>
                       </td>
