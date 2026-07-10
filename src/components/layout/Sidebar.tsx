@@ -14,7 +14,10 @@ import {
   ClipboardCheck, 
   Scale, 
   Gamepad2,
-  Hexagon
+  Hexagon,
+  Database,
+  BarChart3,
+  Settings
 } from 'lucide-react'
 
 const navItems = [
@@ -42,8 +45,16 @@ const navItems = [
     ],
   },
   {
-    section: 'Developer',
+    section: 'Data & Reports',
     items: [
+      { href: '/master', label: 'Master Data', icon: Database },
+      { href: '/reports', label: 'Reports', icon: BarChart3 },
+    ],
+  },
+  {
+    section: 'System',
+    items: [
+      { href: '/settings', label: 'Settings', icon: Settings },
       { href: '/simulation', label: 'Event Simulator', icon: Gamepad2 },
     ],
   },
