@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { Download } from 'lucide-react'
-import { supabase } from '@/lib/db/client'
+import { supabase } from '@/lib/db/browser'
 
 type ExportType = 'PRODUCTS' | 'LEDGER'
 
