@@ -114,16 +114,16 @@ This project utilizes a **Database-Centric Serverless Architecture** pattern.
 
 ```mermaid
 flowchart TD
-    Client[Web Client (React)] -->|Next.js App Router| RSC[React Server Components]
-    Client -->|Form Submits| Actions[Next.js Server Actions]
+    Client["Web Client (React)"] -->|Next.js App Router| RSC["React Server Components"]
+    Client -->|Form Submits| Actions["Next.js Server Actions"]
     
     RSC -->|Read Data| Supabase[(Supabase PostgreSQL)]
     Actions -->|Write Data (RPC/Transactions)| Supabase
     
     subgraph PostgreSQL Layer
-        Supabase -->|Triggers| AuditLog[Audit Logs Table]
-        Supabase -->|Triggers| MaterializedViews[O(1) Summary Tables]
-        Supabase -->|Stored Procedures| FEFO[FEFO Allocation Engine]
+        Supabase -->|Triggers| AuditLog["Audit Logs Table"]
+        Supabase -->|Triggers| MaterializedViews["O(1) Summary Tables"]
+        Supabase -->|Stored Procedures| FEFO["FEFO Allocation Engine"]
     end
 ```
 
