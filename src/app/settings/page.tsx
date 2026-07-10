@@ -1,4 +1,5 @@
-// src/app/settings/page.tsx
+import Link from 'next/link'
+
 export default function SettingsPage() {
   return (
     <div className="page-container">
@@ -42,6 +43,16 @@ export default function SettingsPage() {
                 <span>Peringatan stok di bawah batas minimum</span>
               </label>
               <button className="btn btn-secondary w-max mt-2">Simpan Preferensi</button>
+            </div>
+          </div>
+          
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold mb-4 border-b border-[var(--border-subtle)] pb-2">Administrasi Keamanan</h2>
+            <div className="grid gap-4">
+              <p className="text-sm text-secondary">Lihat semua riwayat aktivitas (audit trail) untuk memantau perubahan data.</p>
+              <Link href="/settings/logs" className="btn btn-secondary w-max flex items-center gap-2">
+                <span>📋</span> Buka Log Sistem
+              </Link>
             </div>
           </div>
         </div>
