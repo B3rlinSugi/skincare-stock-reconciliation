@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { createInbound } from '@/lib/actions/inbound.actions'
 import { Printer, ScanBarcode, CheckCircle2 } from 'lucide-react'
 import { useBarcodeScanner } from '@/hooks/useBarcodeScanner'
+import { CustomSelect } from '@/components/CustomSelect'
 
 interface Product {
   id: string
@@ -177,23 +178,19 @@ export default function InboundForm({ products }: { products: Product[] }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div className="form-group">
               <label className="form-label">Produk *</label>
-              <select 
-                id="product_id" 
-                name="product_id" 
-                required 
-                className={`form-input ${fieldErrors['product_id'] ? 'border-danger' : ''}`} 
-                ref={productSelectRef}
+              <CustomSelect 
+                id="product_id"
+                name="product_id"
+                required
+                error={!!fieldErrors['product_id']}
                 value={selectedProductId}
-                onChange={(e) => setSelectedProductId(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e, batchInputRef)}
-              >
-                <option value="">-- Pilih Produk --</option>
-                {products.map(p => (
-                  <option key={p.id} value={p.id}>
-                    [{p.sku}] {p.name}
-                  </option>
-                ))}
-              </select>
+                onChange={(val) => {
+                  setSelectedProductId(val)
+                  // Optional: Focus next field could go here if needed, but not strictly required
+                }}
+                options={products.map(p => ({ value: p.id, label: `[${p.sku}] ${p.name}` }))}
+                placeholder="-- Pilih Produk --"
+              />
               {getErrorMsg('product_id') || <div className="text-xs text-muted">Pilih produk yang diterima dari maklon</div>}
             </div>
 

@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { createManualOutbound } from '@/lib/actions/outbound.actions'
 import { useBarcodeScanner } from '@/hooks/useBarcodeScanner'
+import { CustomSelect } from '@/components/CustomSelect'
 
 const CHANNELS = [
   { value: 'OFFLINE', label: '🏪 Penjualan Offline', desc: 'Penjualan langsung, bukan via marketplace' },
@@ -145,21 +146,16 @@ export default function OutboundForm({ products }: { products: Product[] }) {
             <div className="form-group flex justify-between items-end">
               <div className="flex-1">
                 <label className="form-label">Produk *</label>
-                <select 
+                <CustomSelect 
                   id="product_id"
-                  name="product_id" 
-                  className={`form-input ${fieldErrors['product_id'] ? 'border-danger' : ''}`} 
-                  required 
+                  name="product_id"
+                  required
+                  error={!!fieldErrors['product_id']}
                   value={selectedProductId}
-                  onChange={(e) => setSelectedProductId(e.target.value)}
-                >
-                  <option value="">-- Pilih Produk --</option>
-                  {products.map(p => (
-                    <option key={p.id} value={p.id}>
-                      [{p.sku}] {p.name}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(val) => setSelectedProductId(val)}
+                  options={products.map(p => ({ value: p.id, label: `[${p.sku}] ${p.name}` }))}
+                  placeholder="-- Pilih Produk --"
+                />
                 {getErrorMsg('product_id')}
               </div>
               <button 
