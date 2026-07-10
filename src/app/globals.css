@@ -245,6 +245,10 @@ html, body {
   transition: all 0.3s ease;
   width: 100%;
 }
+.form-select option {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
 .form-input:hover, .form-select:hover, .form-textarea:hover {
   border-color: var(--border-strong);
 }
