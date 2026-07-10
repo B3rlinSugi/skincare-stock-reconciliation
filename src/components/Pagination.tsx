@@ -2,13 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
 }
 
-export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+function PaginationInner({ totalPages, currentPage }: PaginationProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -42,5 +43,13 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
         Next &raquo;
       </Link>
     </div>
+  )
+}
+
+export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+  return (
+    <Suspense fallback={null}>
+      <PaginationInner totalPages={totalPages} currentPage={currentPage} />
+    </Suspense>
   )
 }

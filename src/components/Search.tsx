@@ -1,9 +1,9 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useTransition } from 'react'
+import { useTransition, Suspense } from 'react'
 
-export default function Search({ placeholder }: { placeholder: string }) {
+function SearchInput({ placeholder }: { placeholder: string }) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -11,15 +11,12 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
   const handleSearch = (term: string) => {
     const params = new URLSearchParams(searchParams)
-    params.set('page', '1') // reset to first page on new search
-    
+    params.set('page', '1')
     if (term) {
       params.set('query', term)
     } else {
       params.delete('query')
     }
-
-    // useTransition for seamless navigation without hard reloads
     startTransition(() => {
       replace(`${pathname}?${params.toString()}`)
     })
@@ -32,11 +29,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         className="form-input"
         placeholder={placeholder}
         defaultValue={searchParams.get('query')?.toString()}
-        onChange={(e) => {
-          // A real app would use a debounce function here, 
-          // but for simplicity we'll just handle it directly.
-          handleSearch(e.target.value)
-        }}
+        onChange={(e) => handleSearch(e.target.value)}
         style={{ paddingLeft: 36 }}
       />
       <div style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>
@@ -48,5 +41,13 @@ export default function Search({ placeholder }: { placeholder: string }) {
         </div>
       )}
     </div>
+  )
+}
+
+export default function Search({ placeholder }: { placeholder: string }) {
+  return (
+    <Suspense fallback={<div style={{ width: '100%', maxWidth: 400 }}><input className="form-input" placeholder={placeholder} style={{ paddingLeft: 36 }} disabled /></div>}>
+      <SearchInput placeholder={placeholder} />
+    </Suspense>
   )
 }

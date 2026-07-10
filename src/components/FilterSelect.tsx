@@ -1,14 +1,14 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useTransition } from 'react'
+import { useTransition, Suspense } from 'react'
 
 interface Option {
   value: string
   label: string
 }
 
-export default function FilterSelect({ paramName, options, placeholder = 'Semua' }: { paramName: string, options: Option[], placeholder?: string }) {
+function FilterSelectInner({ paramName, options, placeholder = 'Semua' }: { paramName: string, options: Option[], placeholder?: string }) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -16,14 +16,12 @@ export default function FilterSelect({ paramName, options, placeholder = 'Semua'
 
   const handleFilter = (val: string) => {
     const params = new URLSearchParams(searchParams)
-    params.set('page', '1') // reset page
-    
+    params.set('page', '1')
     if (val) {
       params.set(paramName, val)
     } else {
       params.delete(paramName)
     }
-
     startTransition(() => {
       replace(`${pathname}?${params.toString()}`)
     })
@@ -48,5 +46,13 @@ export default function FilterSelect({ paramName, options, placeholder = 'Semua'
         </div>
       )}
     </div>
+  )
+}
+
+export default function FilterSelect({ paramName, options, placeholder = 'Semua' }: { paramName: string, options: Option[], placeholder?: string }) {
+  return (
+    <Suspense fallback={<select className="form-input" style={{ minWidth: 150 }}><option>{placeholder}</option></select>}>
+      <FilterSelectInner paramName={paramName} options={options} placeholder={placeholder} />
+    </Suspense>
   )
 }

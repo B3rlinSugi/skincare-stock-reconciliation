@@ -1,6 +1,7 @@
 // src/app/products/page.tsx — Halaman Daftar Produk & Stok
 import { supabaseAdmin } from '@/lib/db/client'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import Pagination from '@/components/Pagination'
 import Search from '@/components/Search'
 import ExportButton from '@/components/ExportButton'
@@ -82,7 +83,9 @@ export default async function ProductsPage(
 
       <div className="page-body">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <Search placeholder="Cari SKU atau Nama Produk..." />
+          <Suspense fallback={<div className="form-input" style={{maxWidth:400}}>Loading...</div>}>
+            <Search placeholder="Cari SKU atau Nama Produk..." />
+          </Suspense>
           <div className="text-sm text-secondary">
             Menampilkan {products.length} dari {count} produk
           </div>
@@ -159,7 +162,9 @@ export default async function ProductsPage(
           </table>
         </div>
 
-        <Pagination totalPages={totalPages} currentPage={currentPage} />
+        <Suspense fallback={null}>
+          <Pagination totalPages={totalPages} currentPage={currentPage} />
+        </Suspense>
       </div>
     </>
   )
