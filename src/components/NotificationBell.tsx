@@ -120,12 +120,14 @@ export function NotificationBell() {
       {isOpen && (
         <div style={{
           position: 'absolute', top: 52, right: 0,
-          width: 320, background: 'var(--bg-elevated)',
-          border: '1px solid var(--border-default)',
+          width: 320, background: 'var(--bg-overlay)',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid var(--border-strong)',
           borderRadius: 12,
-          boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.5), 0 0 20px var(--accent-primary-glow)',
           overflow: 'hidden',
-          display: 'flex', flexDirection: 'column'
+          display: 'flex', flexDirection: 'column',
+          zIndex: 50
         }}>
           <div style={{ padding: '16px', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3 style={{ fontWeight: 600, margin: 0 }}>Notifikasi</h3>

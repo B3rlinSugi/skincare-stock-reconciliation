@@ -4,32 +4,32 @@
 :root {
   /* Neon Glass Futuristic Theme */
   --bg-base: #0B0E14; /* Deep dark blue/black */
-  --bg-surface: rgba(255, 255, 255, 0.02);
-  --bg-elevated: rgba(255, 255, 255, 0.03);
-  --bg-overlay: rgba(11, 14, 20, 0.85);
+  --bg-surface: rgba(255, 255, 255, 0.04);
+  --bg-elevated: rgba(255, 255, 255, 0.06);
+  --bg-overlay: rgba(11, 14, 20, 0.90);
   
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.05);
-  --border-default: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
-  --border-neon: rgba(139, 92, 246, 0.5); /* Purple neon */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.15);
+  --border-strong: rgba(255, 255, 255, 0.25);
+  --border-neon: rgba(139, 92, 246, 0.6); /* Purple neon */
 
   /* Neon Accents */
   --accent-primary: #8B5CF6;       /* Neon Purple */
   --accent-primary-hover: #A78BFA;
-  --accent-primary-glow: rgba(139, 92, 246, 0.3);
+  --accent-primary-glow: rgba(139, 92, 246, 0.5);
   
   --accent-success: #06B6D4;       /* Neon Cyan */
-  --accent-success-glow: rgba(6, 182, 212, 0.3);
+  --accent-success-glow: rgba(6, 182, 212, 0.5);
   
   --accent-warning: #F59E0B;       /* Neon Amber/Gold */
-  --accent-warning-glow: rgba(245, 158, 11, 0.3);
+  --accent-warning-glow: rgba(245, 158, 11, 0.5);
   
   --accent-danger: #EC4899;        /* Neon Pink */
-  --accent-danger-glow: rgba(236, 72, 153, 0.3);
+  --accent-danger-glow: rgba(236, 72, 153, 0.5);
   
   --accent-info: #3B82F6;          /* Neon Blue */
-  --accent-info-glow: rgba(59, 130, 246, 0.3);
+  --accent-info-glow: rgba(59, 130, 246, 0.5);
 
   /* Typography */
   --text-primary: #FFFFFF;
