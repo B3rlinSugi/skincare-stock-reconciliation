@@ -1,6 +1,7 @@
 // src/app/master/products/page.tsx
 import { supabaseAdmin } from '@/lib/db/client'
 import Link from 'next/link'
+import { ClientButton } from '@/components/ClientButton'
 
 export default async function MasterProductsPage() {
   const { data: products, error } = await supabaseAdmin
@@ -27,7 +28,7 @@ export default async function MasterProductsPage() {
     <div className="page-body">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-lg">Katalog Produk</h2>
-        <button className="btn btn-primary btn-sm">+ Tambah Produk</button>
+        <ClientButton className="btn btn-primary btn-sm">+ Tambah Produk</ClientButton>
       </div>
       
       <div className="table-container">
@@ -36,24 +37,22 @@ export default async function MasterProductsPage() {
             <tr>
               <th>SKU</th>
               <th>Nama Produk</th>
-              <th>Kategori</th>
-              <th>Supplier</th>
-              <th>Batas Min Stok</th>
-              <th>Status</th>
+              <th>Base Price</th>
+              <th>Sell Price</th>
+              <th>Aktif?</th>
               <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
             {products?.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-8 text-secondary">Belum ada produk</td></tr>
+              <tr><td colSpan={6} className="text-center py-8 text-secondary">Belum ada produk</td></tr>
             ) : (
               products?.map(prod => (
                 <tr key={prod.id}>
                   <td className="font-mono text-xs">{prod.sku}</td>
                   <td className="font-medium">{prod.name}</td>
-                  <td>{prod.categories?.name || '-'}</td>
-                  <td>{prod.suppliers?.name || '-'}</td>
-                  <td>{prod.min_stock_threshold ?? 100}</td>
+                  <td className="text-muted">Rp 0</td>
+                  <td>Rp {(prod.price || 0).toLocaleString('id-ID')}</td>
                   <td>
                     {prod.is_active ? 
                       <span className="badge badge-success">Aktif</span> : 
@@ -62,7 +61,7 @@ export default async function MasterProductsPage() {
                   </td>
                   <td>
                     <div className="flex gap-2">
-                      <button className="btn btn-secondary btn-sm">Edit</button>
+                      <ClientButton className="btn btn-secondary btn-sm">Edit</ClientButton>
                     </div>
                   </td>
                 </tr>

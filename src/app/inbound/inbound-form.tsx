@@ -133,7 +133,7 @@ export default function InboundForm({ products }: { products: Product[] }) {
   return (
     <div style={{ maxWidth: 560 }}>
       {/* Info Banner */}
-      <div className="alert-banner alert-low mb-6">
+      <div className="alert-banner alert-low mb-8">
         <span style={{ fontSize: 18 }}>ℹ️</span>
         <div className="text-sm">
           <strong>FEFO Otomatis</strong> — Sistem akan mengalokasikan batch dengan kedaluwarsa terdekat saat barang keluar. Kamu tidak perlu memilih batch secara manual.

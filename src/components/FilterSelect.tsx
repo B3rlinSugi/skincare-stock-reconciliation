@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useTransition, Suspense } from 'react'
+import { CustomSelect } from './CustomSelect'
 
 interface Option {
   value: string
@@ -29,19 +30,16 @@ function FilterSelectInner({ paramName, options, placeholder = 'Semua' }: { para
 
   return (
     <div style={{ position: 'relative' }}>
-      <select
-        className="form-input"
-        defaultValue={searchParams.get(paramName)?.toString() || ''}
-        onChange={(e) => handleFilter(e.target.value)}
-        style={{ minWidth: 150 }}
-      >
-        <option value="">{placeholder}</option>
-        {options.map(opt => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
-        ))}
-      </select>
+      <div style={{ minWidth: 180 }}>
+        <CustomSelect
+          value={searchParams.get(paramName)?.toString() || ''}
+          onChange={handleFilter}
+          options={options}
+          placeholder={placeholder}
+        />
+      </div>
       {isPending && (
-        <div style={{ position: 'absolute', right: 30, top: '50%', transform: 'translateY(-50%)' }}>
+        <div style={{ position: 'absolute', right: -24, top: '50%', transform: 'translateY(-50%)' }}>
           ⏳
         </div>
       )}
@@ -51,7 +49,7 @@ function FilterSelectInner({ paramName, options, placeholder = 'Semua' }: { para
 
 export default function FilterSelect({ paramName, options, placeholder = 'Semua' }: { paramName: string, options: Option[], placeholder?: string }) {
   return (
-    <Suspense fallback={<select className="form-input" style={{ minWidth: 150 }}><option>{placeholder}</option></select>}>
+    <Suspense fallback={<div className="form-input" style={{ minWidth: 180, background: 'rgba(0, 0, 0, 0.2)', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}><span>{placeholder}</span><span style={{opacity: 0.5}}>▼</span></div>}>
       <FilterSelectInner paramName={paramName} options={options} placeholder={placeholder} />
     </Suspense>
   )

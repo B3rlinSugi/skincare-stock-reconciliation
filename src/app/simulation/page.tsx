@@ -109,11 +109,11 @@ export default function SimulationPage() {
 
         <div className="grid-cols-2" style={{ gap: 24 }}>
           {/* Shopee */}
-          <div className="sim-group">
-            <div className="sim-group-title">
-              <span style={{ fontSize: 18 }}>🛍️</span> Shopee Events
+          <div className="card flex flex-col justify-between">
+            <div className="font-semibold text-lg mb-4 flex items-center gap-2">
+              <span style={{ fontSize: 20 }}>🛍️</span> Shopee Events
             </div>
-            <div className="sim-buttons">
+            <div className="flex flex-col gap-3 mb-4">
               <SimButton
                 id="shopee-create"
                 label="1. Pesanan Masuk (PENDING)"
@@ -164,11 +164,11 @@ export default function SimulationPage() {
           </div>
 
           {/* TikTok */}
-          <div className="sim-group">
-            <div className="sim-group-title">
-              <span style={{ fontSize: 18 }}>🎵</span> TikTok Shop Events
+          <div className="card flex flex-col justify-between">
+            <div className="font-semibold text-lg mb-4 flex items-center gap-2">
+              <span style={{ fontSize: 20 }}>🎵</span> TikTok Shop Events
             </div>
-            <div className="sim-buttons">
+            <div className="flex flex-col gap-3 mb-4">
               <SimButton
                 id="tiktok-create"
                 label="1. Pesanan Masuk (PENDING)"

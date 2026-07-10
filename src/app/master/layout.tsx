@@ -21,7 +21,7 @@ export default function MasterDataLayout({ children }: { children: React.ReactNo
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 24, marginBottom: 24, borderBottom: '1px solid var(--border-subtle)', paddingBottom: 12 }}>
+      <div style={{ display: 'flex', gap: 24, marginBottom: 24, borderBottom: '1px solid var(--border-subtle)', paddingBottom: 12, paddingLeft: 48, paddingRight: 48 }}>
         {tabs.map(tab => {
           const isActive = pathname === tab.href
           return (

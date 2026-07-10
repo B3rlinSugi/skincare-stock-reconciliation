@@ -11,7 +11,7 @@ export default function SettingsPage() {
       </div>
       
       <div className="page-body">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl mx-auto">
           <div className="mb-8">
             <h2 className="text-lg font-semibold mb-4 border-b border-[var(--border-subtle)] pb-2">Profil Pengguna</h2>
             <div className="grid gap-4">

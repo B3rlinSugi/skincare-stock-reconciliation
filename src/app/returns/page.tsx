@@ -1,8 +1,10 @@
 // src/app/returns/page.tsx — Penanganan Retur
 import { supabaseAdmin } from '@/lib/db/client'
 import Link from 'next/link'
+import { Undo2 } from 'lucide-react'
 import Pagination from '@/components/Pagination'
 import FilterSelect from '@/components/FilterSelect'
+import { EmptyState } from '@/components/EmptyState'
 import { submitTikTokClaim } from '@/lib/actions/return.actions'
 
 const conditionConfig: Record<string, { label: string; cls: string; desc: string }> = {
@@ -157,10 +159,11 @@ export default async function ReturnsPage(
               {returns.length === 0 ? (
                 <tr>
                   <td colSpan={8}>
-                    <div className="empty-state">
-                      <div className="empty-state-icon">↩️</div>
-                      <div className="empty-state-title">Belum ada retur</div>
-                    </div>
+                    <EmptyState 
+                      icon={Undo2} 
+                      title="Belum ada retur" 
+                      description="Tidak ada retur yang sesuai dengan filter saat ini." 
+                    />
                   </td>
                 </tr>
               ) : returns.map(ret => {

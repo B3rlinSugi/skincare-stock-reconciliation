@@ -112,6 +112,29 @@ export default async function OrdersPage(
           </div>
         </div>
 
+        {/* Timing note */}
+        <div className="card mb-6" style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)' }}>
+          <div className="text-xs text-muted font-semibold mb-3" style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            Kapan Stok Dipotong?
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex gap-3 items-center">
+              <span style={{ fontSize: 20 }}>🛍️</span>
+              <div>
+                <div className="text-sm font-semibold text-primary">Shopee</div>
+                <div className="text-xs text-muted">Stok dipotong saat status = <strong className="text-warning">SHIPPED</strong></div>
+              </div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <span style={{ fontSize: 20 }}>🎵</span>
+              <div>
+                <div className="text-sm font-semibold text-primary">TikTok Shop</div>
+                <div className="text-xs text-muted">Stok dipotong saat status = <strong className="text-warning">IN_TRANSIT</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="table-container">
           <table>
             <thead>
@@ -163,28 +186,7 @@ export default async function OrdersPage(
 
         <Pagination totalPages={totalPages} currentPage={currentPage} />
 
-        {/* Timing note */}
-        <div className="card mt-4" style={{ background: 'var(--bg-elevated)' }}>
-          <div className="text-xs text-muted font-semibold mb-2" style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            Kapan Stok Dipotong?
-          </div>
-          <div className="grid-cols-2" style={{ gap: 12 }}>
-            <div className="flex gap-3 items-center">
-              <span style={{ fontSize: 20 }}>🛍️</span>
-              <div>
-                <div className="text-sm font-semibold">Shopee</div>
-                <div className="text-xs text-muted">Stok dipotong saat status = <strong className="text-warning">SHIPPED</strong></div>
-              </div>
-            </div>
-            <div className="flex gap-3 items-center">
-              <span style={{ fontSize: 20 }}>🎵</span>
-              <div>
-                <div className="text-sm font-semibold">TikTok Shop</div>
-                <div className="text-xs text-muted">Stok dipotong saat status = <strong className="text-warning">IN_TRANSIT</strong></div>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </>
   )

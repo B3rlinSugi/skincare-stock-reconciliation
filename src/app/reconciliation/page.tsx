@@ -60,7 +60,7 @@ export default async function ReconciliationPage() {
 
       <div className="page-body">
         {/* Stats */}
-        <div className="grid-cols-3 mb-6">
+        <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="stat-card danger">
             <div className="text-muted text-sm mb-1">Produk dengan Anomali</div>
             <div style={{ fontSize: 32, fontWeight: 800, color: totalAnomalies > 0 ? 'var(--accent-danger)' : 'var(--accent-success)' }}>{totalAnomalies}</div>

@@ -2,6 +2,8 @@
 import { supabaseAdmin } from '@/lib/db/client'
 import { startOpname } from '@/lib/actions/opname.actions'
 import Link from 'next/link'
+import { ClipboardList } from 'lucide-react'
+import { EmptyState } from '@/components/EmptyState'
 
 async function getOpnameSessions() {
   const { data } = await supabaseAdmin
@@ -70,11 +72,11 @@ export default async function OpnamePage() {
               {sessions.length === 0 ? (
                 <tr>
                   <td colSpan={7}>
-                    <div className="empty-state">
-                      <div className="empty-state-icon">📋</div>
-                      <div className="empty-state-title">Belum ada sesi opname</div>
-                      <div className="text-sm text-muted mt-1">Buat sesi opname baru untuk mulai hitung fisik</div>
-                    </div>
+                    <EmptyState 
+                      icon={ClipboardList} 
+                      title="Belum ada sesi opname" 
+                      description="Buat sesi opname baru untuk mulai hitung fisik" 
+                    />
                   </td>
                 </tr>
               ) : sessions.map(session => {

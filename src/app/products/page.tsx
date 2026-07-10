@@ -1,10 +1,10 @@
-// src/app/products/page.tsx — Halaman Daftar Produk & Stok (Bento Grid Premium)
 import Link from 'next/link'
 import { Suspense } from 'react'
 import Pagination from '@/components/Pagination'
 import Search from '@/components/Search'
 import ExportButton from '@/components/ExportButton'
-import { Package, AlertTriangle, CalendarDays, Filter, ChevronDown, Download, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react'
+import { StatCard } from '@/components/StatCard'
+import { Package, AlertTriangle, CalendarDays, Filter, ChevronDown, ChevronRight, Download, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react'
 
 // Helper: direct fetch bypassing supabase-js client
 async function sbFetch(path: string, extraHeaders: Record<string, string> = {}) {
@@ -105,53 +105,43 @@ export default async function ProductsPage(
         <div className="page-body">
           {/* Top Metrics - Bento Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.5fr', gap: '24px' }}>
-            
-            <div className="stat-card" style={{ borderColor: 'rgba(139, 92, 246, 0.3)' }}>
-              <div className="form-label mb-2 flex items-center justify-between">
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(139, 92, 246, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Package size={16} className="text-info" />
-                </div>
-              </div>
-              <div className="text-muted text-xs font-medium mb-1 mt-4">Total Produk</div>
-              <div className="flex justify-between items-end">
-                <div style={{ fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--text-primary)', textShadow: '0 0 20px rgba(255,255,255,0.2)' }}>
-                  {totalCount}
-                </div>
-                <Package size={32} opacity={0.3} className="text-info" style={{ filter: 'drop-shadow(0 0 10px rgba(139, 92, 246, 0.5))' }} />
-              </div>
-              <div className="text-muted text-xs mt-2">Semua Produk</div>
+            <div className="col-span-1">
+              <StatCard 
+                title="Total Produk"
+                value={totalCount}
+                subtitle="Semua Produk"
+                icon={Package}
+                colorClass="text-info"
+                borderColorClass="rgba(139, 92, 246, 0.3)"
+                bgAlphaClass="rgba(139, 92, 246, 0.2)"
+                glowColorClass="rgba(139, 92, 246, 0.5)"
+              />
             </div>
 
-            <div className="stat-card" style={{ borderColor: 'rgba(245, 158, 11, 0.3)' }}>
-              <div className="form-label mb-2 flex items-center justify-between">
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(245, 158, 11, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Package size={16} className="text-warning" />
-                </div>
-              </div>
-              <div className="text-warning text-xs font-medium mb-1 mt-4">Low Stock</div>
-              <div className="flex justify-between items-end">
-                <div style={{ fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--text-primary)', textShadow: '0 0 20px rgba(255,255,255,0.2)' }}>
-                  {lowStockCount}
-                </div>
-                <AlertTriangle size={32} opacity={0.5} className="text-warning" style={{ filter: 'drop-shadow(0 0 10px rgba(245, 158, 11, 0.5))' }} />
-              </div>
-              <div className="text-muted text-xs mt-2">Stok Menipis</div>
+            <div className="col-span-1">
+              <StatCard 
+                title="Low Stock"
+                value={lowStockCount}
+                subtitle="Stok Menipis"
+                icon={AlertTriangle}
+                colorClass={lowStockCount > 0 ? "text-warning" : "text-primary"}
+                borderColorClass="rgba(245, 158, 11, 0.3)"
+                bgAlphaClass="rgba(245, 158, 11, 0.2)"
+                glowColorClass="rgba(245, 158, 11, 0.5)"
+              />
             </div>
 
-            <div className="stat-card" style={{ borderColor: 'rgba(236, 72, 153, 0.3)' }}>
-              <div className="form-label mb-2 flex items-center justify-between">
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'rgba(236, 72, 153, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Package size={16} className="text-danger" />
-                </div>
-              </div>
-              <div className="text-muted text-xs font-medium mb-1 mt-4">Expired</div>
-              <div className="flex justify-between items-end">
-                <div style={{ fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--text-primary)', textShadow: '0 0 20px rgba(255,255,255,0.2)' }}>
-                  {expiredCount}
-                </div>
-                <CalendarDays size={32} opacity={0.5} className="text-danger" style={{ filter: 'drop-shadow(0 0 10px rgba(236, 72, 153, 0.5))' }} />
-              </div>
-              <div className="text-muted text-xs mt-2">Akan Kedaluwarsa</div>
+            <div className="col-span-1">
+              <StatCard 
+                title="Expired"
+                value={expiredCount}
+                subtitle="Akan Kedaluwarsa"
+                icon={CalendarDays}
+                colorClass={expiredCount > 0 ? "text-danger" : "text-primary"}
+                borderColorClass="rgba(236, 72, 153, 0.3)"
+                bgAlphaClass="rgba(236, 72, 153, 0.2)"
+                glowColorClass="rgba(236, 72, 153, 0.5)"
+              />
             </div>
 
             {/* Inventory Health Chart - CSS Only Mockup */}
@@ -219,9 +209,9 @@ export default async function ProductsPage(
             <table>
               <thead>
                 <tr style={{ background: 'var(--bg-surface)' }}>
-                  <th style={{ borderRadius: '12px 0 0 12px' }}>SKU</th>
+                  <th style={{ borderRadius: '12px 0 0 12px', paddingLeft: 24 }}>SKU</th>
                   <th>NAMA PRODUK</th>
-                  <th>TOTAL STOK</th>
+                  <th style={{ width: '22%' }}>TOTAL STOK</th>
                   <th>BATCH AKTIF</th>
                   <th>EXPIRED TERDEKAT</th>
                   <th>STATUS</th>
@@ -259,7 +249,7 @@ export default async function ProductsPage(
 
                   return (
                     <tr key={product.id} style={{ background: 'var(--bg-surface)', borderBottom: '4px solid var(--bg-base)' }}>
-                      <td className="font-mono text-xs" style={{ color: 'var(--text-muted)', borderTopLeftRadius: 12, borderBottomLeftRadius: 12 }}>{product.sku}</td>
+                      <td className="font-mono text-xs" style={{ color: 'var(--text-muted)', borderTopLeftRadius: 12, borderBottomLeftRadius: 12, paddingLeft: 24 }}>{product.sku}</td>
                       <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
                         <div style={{ opacity: product.is_active ? 1 : 0.5 }}>{product.name}</div>
                         {!product.is_active && <div className="text-xs text-danger font-medium mt-1">Tidak Aktif</div>}
@@ -286,8 +276,8 @@ export default async function ProductsPage(
                         </span>
                       </td>
                       <td style={{ borderTopRightRadius: 12, borderBottomRightRadius: 12 }}>
-                        <Link href={`/products/${product.id}`} className="btn btn-sm" style={{ background: 'transparent', border: '1px solid var(--border-strong)', color: 'var(--text-primary)' }}>
-                          Detail <span style={{ color: 'var(--accent-primary)', marginLeft: 4 }}>→</span>
+                        <Link href={`/products/${product.id}`} className="btn btn-secondary btn-sm" style={{ padding: '6px 12px' }}>
+                          Detail <ChevronRight size={14} className="ml-1 opacity-70" />
                         </Link>
                       </td>
                     </tr>

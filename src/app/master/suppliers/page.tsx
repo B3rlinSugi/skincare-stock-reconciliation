@@ -1,5 +1,6 @@
 // src/app/master/suppliers/page.tsx
 import { supabaseAdmin } from '@/lib/db/client'
+import { ClientButton } from '@/components/ClientButton'
 
 export default async function SuppliersPage() {
   const { data: suppliers, error } = await supabaseAdmin
@@ -25,7 +26,7 @@ export default async function SuppliersPage() {
     <div className="page-body">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-lg">Daftar Supplier</h2>
-        <button className="btn btn-primary btn-sm">+ Tambah Supplier</button>
+        <ClientButton className="btn btn-primary btn-sm">+ Tambah Supplier</ClientButton>
       </div>
       
       <div className="table-container">
@@ -49,7 +50,7 @@ export default async function SuppliersPage() {
                   <td>{sup.phone || '-'}</td>
                   <td>
                     <div className="flex gap-2">
-                      <button className="btn btn-secondary btn-sm">Edit</button>
+                      <ClientButton className="btn btn-secondary btn-sm">Edit</ClientButton>
                     </div>
                   </td>
                 </tr>

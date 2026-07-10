@@ -18,6 +18,8 @@ import {
   Search,
   MoreHorizontal
 } from 'lucide-react'
+import { StatCard } from './StatCard'
+import { EmptyState } from './EmptyState'
 
 // Bento Grid Animation Variants
 const containerVariants: Variants = {
@@ -111,48 +113,57 @@ export default function DashboardClient({ data }: { data: any }) {
           </motion.div>
         )}
 
-        {/* Bento Grid layout */}
         <div className="grid-cols-4 mb-6">
-          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(139, 92, 246, 0.3)' }}>
-            <div className="form-label mb-4 flex items-center justify-between">
-              ACTIVE SKUS <Package size={16} className="text-info" />
-            </div>
-            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: 'var(--text-primary)', textShadow: '0 0 20px rgba(255,255,255,0.2)' }}>
-              <AnimatedNumber value={data.totalProducts} />
-            </div>
-            <div className="text-muted text-xs mt-4 flex gap-2 items-center">
-              <span className="text-success font-medium">+2 this week</span>
-            </div>
+          <motion.div variants={itemVariants} className="col-span-1">
+            <StatCard 
+              title="ACTIVE SKUS"
+              value={data.totalProducts}
+              subtitle="+2 this week"
+              icon={Package}
+              colorClass="text-info"
+              borderColorClass="rgba(139, 92, 246, 0.3)"
+              bgAlphaClass="rgba(139, 92, 246, 0.2)"
+              glowColorClass="rgba(139, 92, 246, 0.5)"
+            />
           </motion.div>
 
-          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(236, 72, 153, 0.3)' }}>
-            <div className="form-label mb-4 flex items-center justify-between">
-              STOCK DEPLETED <AlertTriangle size={16} className="text-danger" />
-            </div>
-            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.zeroStock > 0 ? 'var(--accent-danger)' : 'var(--text-primary)', textShadow: data.zeroStock > 0 ? '0 0 20px var(--accent-danger-glow)' : 'none' }}>
-              <AnimatedNumber value={data.zeroStock} />
-            </div>
-            <div className="text-muted text-xs mt-4">items need restock</div>
+          <motion.div variants={itemVariants} className="col-span-1">
+            <StatCard 
+              title="STOCK DEPLETED"
+              value={data.zeroStock}
+              subtitle="items need restock"
+              icon={AlertTriangle}
+              colorClass={data.zeroStock > 0 ? "text-danger" : "text-primary"}
+              borderColorClass="rgba(236, 72, 153, 0.3)"
+              bgAlphaClass="rgba(236, 72, 153, 0.15)"
+              glowColorClass="rgba(236, 72, 153, 0.5)"
+            />
           </motion.div>
 
-          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(245, 158, 11, 0.3)' }}>
-            <div className="form-label mb-4 flex items-center justify-between">
-              LOW STOCK <TrendingDown size={16} className="text-warning" />
-            </div>
-            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.lowStock > 0 ? 'var(--accent-warning)' : 'var(--text-primary)', textShadow: data.lowStock > 0 ? '0 0 20px var(--accent-warning-glow)' : 'none' }}>
-              <AnimatedNumber value={data.lowStock} />
-            </div>
-            <div className="text-muted text-xs mt-4">items &lt; 100 units</div>
+          <motion.div variants={itemVariants} className="col-span-1">
+            <StatCard 
+              title="LOW STOCK"
+              value={data.lowStock}
+              subtitle="items < 100 units"
+              icon={TrendingDown}
+              colorClass={data.lowStock > 0 ? "text-warning" : "text-primary"}
+              borderColorClass="rgba(245, 158, 11, 0.3)"
+              bgAlphaClass="rgba(245, 158, 11, 0.15)"
+              glowColorClass="rgba(245, 158, 11, 0.5)"
+            />
           </motion.div>
 
-          <motion.div variants={itemVariants} className="stat-card col-span-1" style={{ borderColor: 'rgba(59, 130, 246, 0.3)' }}>
-            <div className="form-label mb-4 flex items-center justify-between">
-              PENDING RETURNS <Undo2 size={16} className="text-info" />
-            </div>
-            <div style={{ fontSize: 48, fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1, color: data.pendingReturns.length > 0 ? 'var(--accent-info)' : 'var(--text-primary)', textShadow: data.pendingReturns.length > 0 ? '0 0 20px var(--accent-info-glow)' : 'none' }}>
-              <AnimatedNumber value={data.pendingReturns.length} />
-            </div>
-            <div className="text-muted text-xs mt-4">awaiting inspection</div>
+          <motion.div variants={itemVariants} className="col-span-1">
+            <StatCard 
+              title="PENDING RETURNS"
+              value={data.pendingReturns.length}
+              subtitle="awaiting inspection"
+              icon={Undo2}
+              colorClass={data.pendingReturns.length > 0 ? "text-info" : "text-primary"}
+              borderColorClass="rgba(59, 130, 246, 0.3)"
+              bgAlphaClass="rgba(59, 130, 246, 0.15)"
+              glowColorClass="rgba(59, 130, 246, 0.5)"
+            />
           </motion.div>
         </div>
 
@@ -226,23 +237,23 @@ export default function DashboardClient({ data }: { data: any }) {
             <table>
               <thead>
                 <tr>
-                  <th style={{ paddingLeft: 32 }}>Item</th>
-                  <th>Action</th>
-                  <th>Source</th>
-                  <th>Quantity</th>
-                  <th>Timestamp</th>
-                  <th style={{ paddingRight: 32 }}></th>
+                  <th style={{ paddingLeft: 32, width: '40%' }}>Item</th>
+                  <th style={{ width: '15%' }}>Action</th>
+                  <th style={{ width: '15%' }}>Source</th>
+                  <th style={{ width: '15%' }}>Quantity</th>
+                  <th style={{ width: '15%' }}>Timestamp</th>
+                  <th style={{ paddingRight: 32, width: '48px' }}></th>
                 </tr>
               </thead>
               <motion.tbody variants={tableVariants} initial="hidden" animate="show">
                 {data.recentLedger.length === 0 ? (
                   <tr>
                     <td colSpan={6} style={{ padding: 0 }}>
-                      <div className="empty-state">
-                        <Clock className="empty-state-icon mx-auto" size={32} />
-                        <div className="empty-state-title mt-4">No recent activity</div>
-                        <div className="text-sm text-muted">Ledger is currently empty.</div>
-                      </div>
+                      <EmptyState 
+                        icon={Clock} 
+                        title="No recent activity" 
+                        description="Ledger is currently empty." 
+                      />
                     </td>
                   </tr>
                 ) : (

@@ -10,8 +10,8 @@ const CHANNELS = [
   { value: 'BONUS', label: '🎁 Bonus', desc: 'Bonus yang diberikan ke customer' },
   { value: 'PROMO', label: '📣 Promo / Giveaway', desc: 'Barang untuk keperluan promosi' },
   { value: 'SAMPLE', label: '🧪 Sampel', desc: 'Sampel untuk testing atau review' },
-  { value: 'DAMAGED', label: '💔 Barang Rusak', desc: 'Barang rusak yang dibuang' },
-  { value: 'EXPIRED', label: '⚠️ Kedaluwarsa', desc: 'Barang expired yang dibuang' },
+  { value: 'DAMAGED', label: '📦 Barang Rusak', desc: 'Barang rusak yang dibuang' },
+  { value: 'EXPIRED', label: '📅 Kedaluwarsa', desc: 'Barang expired yang dibuang' },
 ]
 
 interface Product {
@@ -84,7 +84,7 @@ export default function OutboundForm({ products }: { products: Product[] }) {
   }
 
   return (
-    <div className="grid-cols-2" style={{ gap: 24, alignItems: 'start' }}>
+    <div className="grid grid-cols-2 items-stretch" style={{ gap: 24 }}>
       {/* Form */}
       <div className="card">
         <div style={{ fontWeight: 600, marginBottom: 20 }}>Form Keluar Manual</div>
@@ -188,15 +188,16 @@ export default function OutboundForm({ products }: { products: Product[] }) {
       </div>
 
       {/* Info */}
-      <div>
-        <div className="card mb-4" style={{ border: '1px solid rgba(245,158,11,0.2)', background: 'rgba(245,158,11,0.05)' }}>
+      {/* Info */}
+      <div className="flex flex-col h-full gap-4">
+        <div className="card" style={{ border: '1px solid rgba(245,158,11,0.2)', background: 'rgba(245,158,11,0.05)' }}>
           <div className="text-warning font-semibold text-sm mb-2">⚠️ Penting: Alasan & Kanal Terpisah</div>
           <div className="text-sm text-secondary">
             Penjualan offline dan bonus sama-sama input manual, tapi maknanya berbeda. Satu adalah penjualan, satu adalah barang gratis. Keduanya tidak boleh tercampur agar rekonsiliasi akurat.
           </div>
         </div>
 
-        <div className="card">
+        <div className="card flex-1">
           <div className="text-xs text-muted font-semibold mb-3" style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             FEFO Allocation Process
           </div>

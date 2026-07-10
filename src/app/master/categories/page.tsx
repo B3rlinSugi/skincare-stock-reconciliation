@@ -1,5 +1,6 @@
 // src/app/master/categories/page.tsx
 import { supabaseAdmin } from '@/lib/db/client'
+import { ClientButton } from '@/components/ClientButton'
 
 export default async function CategoriesPage() {
   const { data: categories, error } = await supabaseAdmin
@@ -26,7 +27,7 @@ export default async function CategoriesPage() {
     <div className="page-body">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-semibold text-lg">Daftar Kategori</h2>
-        <button className="btn btn-primary btn-sm">+ Tambah Kategori</button>
+        <ClientButton className="btn btn-primary btn-sm">+ Tambah Kategori</ClientButton>
       </div>
       
       <div className="table-container">
@@ -48,7 +49,7 @@ export default async function CategoriesPage() {
                   <td className="text-secondary">{cat.description || '-'}</td>
                   <td>
                     <div className="flex gap-2">
-                      <button className="btn btn-secondary btn-sm">Edit</button>
+                      <ClientButton className="btn btn-secondary btn-sm">Edit</ClientButton>
                     </div>
                   </td>
                 </tr>
