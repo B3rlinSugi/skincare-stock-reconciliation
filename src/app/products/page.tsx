@@ -1,10 +1,24 @@
 // src/app/products/page.tsx — Halaman Daftar Produk & Stok
-import { supabaseAdmin } from '@/lib/db/client'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import Pagination from '@/components/Pagination'
 import Search from '@/components/Search'
 import ExportButton from '@/components/ExportButton'
+
+// Helper: direct fetch bypassing supabase-js client
+async function sbFetch(path: string, extraHeaders: Record<string, string> = {}) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  const res = await fetch(`${url}/rest/v1/${path}`, {
+    headers: { apikey: key, Authorization: `Bearer ${key}`, ...extraHeaders },
+    cache: 'no-store',
+  })
+  if (!res.ok) {
+    const err = await res.text()
+    throw new Error(`Supabase error ${res.status}: ${err}`)
+  }
+  return res
+}
 
 export default async function ProductsPage(
   props: { searchParams: Promise<{ query?: string; page?: string }> }
@@ -16,42 +30,33 @@ export default async function ProductsPage(
   const limit = 20
   const offset = (currentPage - 1) * limit
 
-  // 1. Fetch paginated products based on search
-  let productsQuery = supabaseAdmin
-    .from('products')
-    .select('id, sku, name, is_active', { count: 'exact' })
-
-  if (query) {
-    productsQuery = productsQuery.or(`name.ilike.%${query}%,sku.ilike.%${query}%`)
-  }
-
-  const { data: productsData, count, error: productsError } = await productsQuery
-    .order('name', { ascending: true })
-    .range(offset, offset + limit - 1)
-
-  if (productsError) {
-    return <div className="p-8" style={{color:'red', padding:'2rem', fontFamily:'monospace'}}>
-      <h2>DB Error (products)</h2>
-      <pre>{JSON.stringify(productsError, null, 2)}</pre>
-    </div>
-  }
-
-  const products = productsData ?? []
-  const totalPages = Math.ceil((count || 0) / limit)
+  // 1. Fetch paginated products
+  const searchFilter = query
+    ? `&or=(name.ilike.*${encodeURIComponent(query)}*,sku.ilike.*${encodeURIComponent(query)}*)`
+    : ''
+  const productsRes = await sbFetch(
+    `products?select=id,sku,name,is_active&order=name.asc&limit=${limit}&offset=${offset}${searchFilter}`,
+    { 'Prefer': 'count=exact' }
+  )
+  const countHeader = productsRes.headers.get('content-range') // e.g. "0-19/70"
+  const totalCount = countHeader ? parseInt(countHeader.split('/')[1] || '0') : 0
+  const products: any[] = await productsRes.json()
+  const totalPages = Math.ceil(totalCount / limit)
 
   // 2. Fetch stock totals and batches ONLY for these paginated products
-  const productIds = products.map(p => p.id)
+  const productIds = products.map((p: any) => p.id)
 
   let totals: any[] = []
   let rows: any[] = []
 
   if (productIds.length > 0) {
-    const [totalsResult, batchesResult] = await Promise.all([
-      supabaseAdmin.from('v_product_stock_total').select('*').in('product_id', productIds),
-      supabaseAdmin.from('v_current_stock').select('*').in('product_id', productIds)
+    const idFilter = `product_id=in.(${productIds.join(',')})`
+    const [totalsRes, batchesRes] = await Promise.all([
+      sbFetch(`v_product_stock_total?${idFilter}`),
+      sbFetch(`v_current_stock?${idFilter}`)
     ])
-    totals = totalsResult.data ?? []
-    rows = batchesResult.data ?? []
+    totals = await totalsRes.json()
+    rows = await batchesRes.json()
   }
 
   const today = new Date()
