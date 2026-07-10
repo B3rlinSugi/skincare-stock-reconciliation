@@ -70,10 +70,10 @@ export default function DashboardClient({ data }: { data: any }) {
           <h1 className="page-title">Overview</h1>
           <p className="page-subtitle">Real-time inventory metrics</p>
         </div>
-        <div className="flex gap-4">
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted" />
-            <input type="text" placeholder="Search..." className="form-input pl-9 w-64" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)' }} />
+        <div className="flex items-center gap-4">
+          <div className="relative flex items-center">
+            <Search size={16} className="absolute left-3 text-muted" />
+            <input type="text" placeholder="Search..." className="form-input w-64" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-subtle)', paddingLeft: '2.5rem' }} />
           </div>
           <Link href="/reconciliation" className="btn btn-primary" style={{ background: 'linear-gradient(90deg, #8B5CF6, #3B82F6)' }}>
             Run Reconciliation
@@ -170,7 +170,7 @@ export default function DashboardClient({ data }: { data: any }) {
         {/* Action Bento Cards */}
         <div className="grid-cols-3 mb-6">
           <motion.div variants={itemVariants}>
-            <div className="card h-full flex-col justify-between" style={{ borderColor: 'rgba(6, 182, 212, 0.2)' }}>
+            <div className="card h-full flex flex-col justify-between" style={{ borderColor: 'rgba(6, 182, 212, 0.2)' }}>
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div style={{ width: 56, height: 56, borderRadius: 16, border: '1px solid rgba(6,182,212,0.4)', background: 'rgba(6,182,212,0.1)', color: 'var(--accent-success)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px var(--accent-success-glow), inset 0 0 10px var(--accent-success-glow)' }}>
@@ -188,7 +188,7 @@ export default function DashboardClient({ data }: { data: any }) {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <div className="card h-full flex-col justify-between" style={{ borderColor: 'rgba(236, 72, 153, 0.2)' }}>
+            <div className="card h-full flex flex-col justify-between" style={{ borderColor: 'rgba(236, 72, 153, 0.2)' }}>
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div style={{ width: 56, height: 56, borderRadius: 16, border: '1px solid rgba(236,72,153,0.4)', background: 'rgba(236,72,153,0.1)', color: 'var(--accent-danger)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px var(--accent-danger-glow), inset 0 0 10px var(--accent-danger-glow)' }}>
@@ -206,7 +206,7 @@ export default function DashboardClient({ data }: { data: any }) {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <div className="card h-full flex-col justify-between" style={{ borderColor: 'rgba(59, 130, 246, 0.2)' }}>
+            <div className="card h-full flex flex-col justify-between" style={{ borderColor: 'rgba(59, 130, 246, 0.2)' }}>
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div style={{ width: 56, height: 56, borderRadius: 16, border: '1px solid rgba(59,130,246,0.4)', background: 'rgba(59,130,246,0.1)', color: 'var(--accent-info)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px var(--accent-info-glow), inset 0 0 10px var(--accent-info-glow)' }}>
