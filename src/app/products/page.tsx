@@ -8,6 +8,7 @@ import ExportButton from '@/components/ExportButton'
 export default async function ProductsPage(
   props: { searchParams: Promise<{ query?: string; page?: string }> }
 ) {
+  try {
   const searchParams = await props.searchParams
   const query = searchParams?.query || ''
   const currentPage = Number(searchParams?.page) || 1
@@ -28,7 +29,10 @@ export default async function ProductsPage(
     .range(offset, offset + limit - 1)
 
   if (productsError) {
-    return <div className="p-8 text-danger">Gagal memuat produk: {productsError.message}</div>
+    return <div className="p-8" style={{color:'red', padding:'2rem', fontFamily:'monospace'}}>
+      <h2>DB Error (products)</h2>
+      <pre>{JSON.stringify(productsError, null, 2)}</pre>
+    </div>
   }
 
   const products = productsData ?? []
@@ -159,4 +163,16 @@ export default async function ProductsPage(
       </div>
     </>
   )
+  } catch (err: any) {
+    return (
+      <div style={{color:'white', padding:'2rem', fontFamily:'monospace', background:'#1a0000', minHeight:'100vh'}}>
+        <h2 style={{color:'#ff6b6b'}}>🔴 Server Error — /products</h2>
+        <pre style={{background:'#2a0000', padding:'1rem', borderRadius:'8px', overflow:'auto', fontSize:'13px'}}>
+          {err?.message || String(err)}
+          {'\n\nStack:\n'}
+          {err?.stack}
+        </pre>
+      </div>
+    )
+  }
 }
