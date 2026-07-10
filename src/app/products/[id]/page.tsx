@@ -4,6 +4,7 @@ import { StockLedgerService } from '@/lib/engine/stock-ledger.service'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import CancelLedgerButton from '@/components/CancelLedgerButton'
+import PrintBarcodeButton from '@/components/PrintBarcodeButton'
 
 const channelLabel: Record<string, string> = {
   MAKLON: 'Masuk Maklon', SHOPEE: 'Shopee', TIKTOK: 'TikTok', OFFLINE: 'Offline',
@@ -36,7 +37,10 @@ export default async function ProductDetailPage(props: { params: Promise<{ id: s
       <div className="page-header">
         <div>
           <Link href="/products" className="text-muted text-sm" style={{ textDecoration: 'none' }}>← Kembali ke Produk</Link>
-          <h1 className="page-title mt-1">{product.name}</h1>
+          <div className="flex items-center gap-4 mt-1">
+            <h1 className="page-title">{product.name}</h1>
+            <PrintBarcodeButton value={product.sku} label="Barcode SKU" />
+          </div>
           <p className="page-subtitle font-mono">{product.sku}</p>
         </div>
         <div style={{ textAlign: 'right' }}>

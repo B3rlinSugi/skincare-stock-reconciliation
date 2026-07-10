@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { createInbound } from '@/lib/actions/inbound.actions'
-import { Printer, ScanBarcode } from 'lucide-react'
+import { Printer, ScanBarcode, CheckCircle2 } from 'lucide-react'
+import { useBarcodeScanner } from '@/hooks/useBarcodeScanner'
 
 interface Product {
   id: string
@@ -18,15 +19,33 @@ export default function InboundForm({ products }: { products: Product[] }) {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
   const [scannerMode, setScannerMode] = useState(false)
   
+  // Selected product ID for controlled select
+  const [selectedProductId, setSelectedProductId] = useState<string>("")
+  
   const formRef = useRef<HTMLFormElement>(null)
   const productSelectRef = useRef<HTMLSelectElement>(null)
   const batchInputRef = useRef<HTMLInputElement>(null)
   const qtyInputRef = useRef<HTMLInputElement>(null)
   const expiryInputRef = useRef<HTMLInputElement>(null)
 
-  // Search logic for custom combobox or simple select
-  // For simplicity and stability, we use a standard <select> 
-  // with a datalist if there are many products, but <select> is fine for 65 items.
+  // Use the global barcode scanner hook
+  useBarcodeScanner((barcode) => {
+    if (!scannerMode) return
+    
+    // Check if barcode matches a product SKU
+    const product = products.find(p => p.sku === barcode)
+    if (product) {
+      setSelectedProductId(product.id)
+      // Focus next field (batch)
+      setTimeout(() => batchInputRef.current?.focus(), 100)
+    } else {
+      // If not a product, maybe it's a batch code?
+      if (batchInputRef.current) {
+        batchInputRef.current.value = barcode
+        setTimeout(() => qtyInputRef.current?.focus(), 100)
+      }
+    }
+  })
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -159,14 +178,16 @@ export default function InboundForm({ products }: { products: Product[] }) {
             <div className="form-group">
               <label className="form-label">Produk *</label>
               <select 
-                ref={productSelectRef}
+                id="product_id" 
                 name="product_id" 
-                className={`form-input ${fieldErrors['product_id'] ? 'border-danger' : ''}`} 
                 required 
-                defaultValue=""
+                className={`form-input ${fieldErrors['product_id'] ? 'border-danger' : ''}`} 
+                ref={productSelectRef}
+                value={selectedProductId}
+                onChange={(e) => setSelectedProductId(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e, batchInputRef)}
               >
-                <option value="" disabled>-- Pilih Produk --</option>
+                <option value="">-- Pilih Produk --</option>
                 {products.map(p => (
                   <option key={p.id} value={p.id}>
                     [{p.sku}] {p.name}

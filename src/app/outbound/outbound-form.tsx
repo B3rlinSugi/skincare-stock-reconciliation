@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { createManualOutbound } from '@/lib/actions/outbound.actions'
+import { useBarcodeScanner } from '@/hooks/useBarcodeScanner'
 
 const CHANNELS = [
   { value: 'OFFLINE', label: '🏪 Penjualan Offline', desc: 'Penjualan langsung, bukan via marketplace' },
@@ -25,6 +26,19 @@ export default function OutboundForm({ products }: { products: Product[] }) {
   const [allocations, setAllocations] = useState<{ batch_code: string; deducted_qty: number }[]>([])
   const [selectedChannel, setSelectedChannel] = useState('')
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({})
+  
+  const [selectedProductId, setSelectedProductId] = useState('')
+  const [scannerMode, setScannerMode] = useState(false)
+  const qtyInputRef = useRef<HTMLInputElement>(null)
+
+  useBarcodeScanner((barcode) => {
+    if (!scannerMode) return
+    const product = products.find(p => p.sku === barcode)
+    if (product) {
+      setSelectedProductId(product.id)
+      setTimeout(() => qtyInputRef.current?.focus(), 100)
+    }
+  })
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -128,22 +142,39 @@ export default function OutboundForm({ products }: { products: Product[] }) {
               {getErrorMsg('channel')}
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Produk *</label>
-              <select name="product_id" className={`form-input ${fieldErrors['product_id'] ? 'border-danger' : ''}`} required defaultValue="">
-                <option value="" disabled>-- Pilih Produk --</option>
-                {products.map(p => (
-                  <option key={p.id} value={p.id}>
-                    [{p.sku}] {p.name}
-                  </option>
-                ))}
-              </select>
-              {getErrorMsg('product_id')}
+            <div className="form-group flex justify-between items-end">
+              <div className="flex-1">
+                <label className="form-label">Produk *</label>
+                <select 
+                  id="product_id"
+                  name="product_id" 
+                  className={`form-input ${fieldErrors['product_id'] ? 'border-danger' : ''}`} 
+                  required 
+                  value={selectedProductId}
+                  onChange={(e) => setSelectedProductId(e.target.value)}
+                >
+                  <option value="">-- Pilih Produk --</option>
+                  {products.map(p => (
+                    <option key={p.id} value={p.id}>
+                      [{p.sku}] {p.name}
+                    </option>
+                  ))}
+                </select>
+                {getErrorMsg('product_id')}
+              </div>
+              <button 
+                type="button"
+                onClick={() => setScannerMode(!scannerMode)}
+                className={`ml-2 btn ${scannerMode ? 'btn-primary' : 'btn-secondary'} px-3`}
+                title="Scanner Mode"
+              >
+                Scan Barcode
+              </button>
             </div>
 
             <div className="form-group">
               <label className="form-label">Jumlah (Unit) *</label>
-              <input name="qty" type="number" min="1" className={`form-input ${fieldErrors['qty'] ? 'border-danger' : ''}`} placeholder="0" required />
+              <input ref={qtyInputRef} name="qty" type="number" min="1" className={`form-input ${fieldErrors['qty'] ? 'border-danger' : ''}`} placeholder="0" required />
               {getErrorMsg('qty') || <div className="text-xs text-muted">Batch akan dipilih otomatis dengan FEFO</div>}
             </div>
 
