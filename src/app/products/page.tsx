@@ -92,7 +92,7 @@ export default async function ProductsPage(
             <Search placeholder="Cari SKU atau Nama Produk..." />
           </Suspense>
           <div className="text-sm text-secondary">
-            Menampilkan {products.length} dari {count} produk
+            Menampilkan {products.length} dari {totalCount} produk
           </div>
         </div>
 
