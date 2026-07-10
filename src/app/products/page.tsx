@@ -193,7 +193,7 @@ export default async function ProductsPage(
           }}>
             <div style={{ flex: 1 }}>
               <Suspense fallback={<div className="text-muted">Loading...</div>}>
-                <Search placeholder="Cari SKU atau Nama Produk..." className="w-full" style={{ background: 'transparent', border: 'none', boxShadow: 'none', paddingLeft: 0 }} />
+                <Search placeholder="Cari SKU atau Nama Produk..." />
               </Suspense>
             </div>
             
