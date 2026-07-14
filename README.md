@@ -1,33 +1,13 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/hexagon.svg" alt="Logo" width="80" height="80">
-  
-  <h1 align="center">Skincare Stock Reconciliation System</h1>
-  
-  <p align="center">
-    <strong>Enterprise-Grade Append-Only Warehouse Management System</strong>
-  </p>
-  
-  <p align="center">
-    A robust, fraud-proof stock management system engineered for high-volume Skincare brands, featuring real-time reconciliation, FEFO allocation, and an immutable ledger architecture.<br><br>
-    <strong>🚀 Tech Stack:</strong> TypeScript, Next.js 14, Supabase, PostgreSQL
-  </p>
-
-  <p align="center">
-    <img src="https://img.shields.io/badge/Language-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="Language" />
-    <img src="https://img.shields.io/badge/Framework-Next.js_14-black?style=for-the-badge&logo=next.js" alt="Framework" />
-    <img src="https://img.shields.io/badge/Database-PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="Database" />
-    <img src="https://img.shields.io/badge/Backend-Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Backend" />
-    <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License" />
-  </p>
-
-  <p align="center">
-    <img src="https://img.shields.io/badge/Status-Active_Development-success?style=flat-square" alt="Status" />
-    <img src="https://img.shields.io/badge/Version-v0.1.0-blue?style=flat-square" alt="Version" />
-    <img src="https://img.shields.io/github/last-commit/B3rlinSugi/skincare-stock-reconciliation?style=flat-square" alt="Last Updated" />
-    <img src="https://img.shields.io/github/stars/B3rlinSugi/skincare-stock-reconciliation?style=flat-square" alt="Stars" />
-    <img src="https://img.shields.io/github/issues/B3rlinSugi/skincare-stock-reconciliation?style=flat-square" alt="Issues" />
-  </p>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=250&section=header&text=Skincare%20Stock%20Reconciliation&fontSize=60&fontAlignY=35&desc=Enterprise-Grade%20Warehouse%20Management%20System&descAlignY=55&descAlign=50" />
 </div>
+
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/TypeScript-Strict-3178C6?logo=typescript&style=for-the-badge" alt="TypeScript" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Next.js-14-black?logo=next.js&style=for-the-badge" alt="Next.js" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/PostgreSQL-Immutable-316192?logo=postgresql&style=for-the-badge" alt="PostgreSQL" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Supabase-Backend-3ECF8E?logo=supabase&style=for-the-badge" alt="Supabase" /></a>
+</p>
 
 ---
 
